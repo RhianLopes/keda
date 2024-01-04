@@ -26,4 +26,3 @@ scaling:
       topic: example-topic
       lagThreshold: "5"
       offsetResetPolicy: earliest
-      version: 2.8.0

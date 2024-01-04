@@ -1,10 +1,13 @@
 # KEDA
 
-## Running rancher localhost
+## Install rancher, kafka, zookeeper and kafka ui with docker
 
 ```shell
-docker run -d --restart=unless-stopped   -p 80:80 -p 443:443   --privileged   rancher/rancher:latest
+docker compose up -d
 ```
+
+- Rancher: http://localhost:80/
+- Kafka UI: http://localhost:8080/
 
 ## Install keda with helm
 
@@ -21,12 +24,6 @@ helm install keda kedacore/keda --namespace keda --create-namespace
 ```
 
 > https://github.com/rancher/local-path-provisioner Opcional
-
-## Install kafka, zookeeper and kafka ui with docker
-
-```shell
-docker compose up -d
-```
 
 ## Get kafka container ip
 
