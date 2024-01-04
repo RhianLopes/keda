@@ -1,0 +1,29 @@
+environment: dev
+
+image:
+  repository: rhianlopes/kafka-consumer
+  tag: latest
+  pullPolicy: Always
+
+network:
+  port: 3000
+
+env:
+  KAFKA_BROKER: '1.2.3.4:9092'
+  KAFKA_CONSUMER_GROUP: 'example-consumer-group'
+  KAFKA_TOPIC: 'example-topic'
+
+scaling: 
+  minReplicas: 0
+  maxReplicas: 4
+  pollingInterval: 1
+  cooldownPeriod: 1
+  triggers:
+  - type: kafka
+    metadata:
+      bootstrapServers: 1.2.3.4:9092
+      consumerGroup: example-consumer-group
+      topic: example-topic
+      lagThreshold: "5"
+      offsetResetPolicy: earliest
+      version: 2.8.0

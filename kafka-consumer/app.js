@@ -4,8 +4,8 @@ const Kafka = require('node-rdkafka');
 const app = express();
 
 const consumer = new Kafka.KafkaConsumer({
-  'group.id': 'my-group',
-  'metadata.broker.list': 'your-kafka-broker:port',
+  'group.id': process.env.KAFKA_CONSUMER_GROUP,
+  'metadata.broker.list': process.env.KAFKA_BROKER,
 });
 
 consumer.connect();
@@ -13,7 +13,7 @@ consumer.connect();
 consumer
   .on('ready', () => {
     console.log('Consumer is ready');
-    consumer.subscribe(['your-topic']);
+    consumer.subscribe([process.env.KAFKA_TOPIC]);
     consumer.consume();
   })
   .on('data', (message) => {
