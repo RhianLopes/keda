@@ -1,3 +1,4 @@
 apiVersion: v2
 name: helm-charts-app
 description: A Helm chart for Kubernetes Worker
+version: 1.0.0

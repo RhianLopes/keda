@@ -9,6 +9,14 @@ docker compose up -d
 - Rancher: http://localhost:80/
 - Kafka UI: http://localhost:8080/
 
+```shell
+docker logs rancher 2>&1 | grep "Bootstrap Password:"
+```
+
+```shell
+code ~/.kube/config
+```
+
 ## Install keda with helm
 
 ```shell
@@ -34,7 +42,7 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' kaf
 ## Build and run locally kafka-consumer-app 
 
 ```shell
-cd kafka-consumer-app
+cd kafka-consumer
 ```
 
 ```shell
@@ -51,6 +59,11 @@ docker push rhianlopes/kafka-consumer:latest
 
 ## Deploy Consumer with Helm
 
+
 ```shell
-helm upgrade --install kafka-consumer helm-charts/worker -f helm-charts/worker/values.yaml
+cd ..
+```
+
+```shell
+helm upgrade --install kafka-consumer helm-charts/worker -f helm-charts/worker/values.yaml --namespace dev-kafka-consumer --create-namespace
 ```
