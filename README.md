@@ -6,7 +6,7 @@
 - [Helm](https://helm.sh/docs/intro/install/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
 
-## Install rancher, kafka, zookeeper and kafka ui with docker
+## Install Rancher with Docker
 
 ```shell
 docker run --name rancher -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:latest
@@ -28,7 +28,7 @@ In the top right corner of the website copy your `.kube/config` and edit your lo
 code ~/.kube/config
 ```
 
-## Install local path storage for rancher
+## Install local path storage for rancher with Kubectl
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
@@ -72,7 +72,7 @@ kubectl -n kafka-ui port-forward svc/kafka-ui 8080:80
 
 Access and create a `example-topic` for test
 
-## Build and run locally kafka-consumer-app 
+## Build and run locally kafka-consumer-app with Docker
 
 ```shell
 cd kafka-consumer
