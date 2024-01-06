@@ -1,40 +1,50 @@
 const express = require('express');
-const Kafka = require('node-rdkafka');
+const bodyParser = require('body-parser');
+const { Kafka } = require('kafkajs');
 
 const app = express();
+const port = 3000;
 
-const consumer = new Kafka.KafkaConsumer({
-  'group.id': process.env.KAFKA_CONSUMER_GROUP,
-  'metadata.broker.list': process.env.KAFKA_BROKER,
+app.use(bodyParser.json());
+
+const brokers = process.env.KAFKA_BROKERS ? process.env.KAFKA_BROKERS.split(',') : [];
+
+const kafka = new Kafka({
+  clientId: process.env.KAFKA_CONSUMER_GROUP,
+  brokers: brokers,
+  sasl: {
+    mechanism: 'plain',
+    username: process.env.KAFKA_USER,
+    password: process.env.KAFKA_PASSWORD,
+  },
 });
 
-consumer.connect();
+const consumer = kafka.consumer({ groupId: process.env.KAFKA_CONSUMER_GROUP });
 
-consumer
-  .on('ready', () => {
-    console.log('Consumer is ready');
-    consumer.subscribe([process.env.KAFKA_TOPIC]);
-    consumer.consume();
-  })
-  .on('data', (message) => {
-    const msg = message.value.toString();
-    console.log('Received message:', msg);
+const runConsumer = async () => {
+  await consumer.connect();
 
-    app.emit('kafkaMessage', msg);
-  })
-  .on('error', (err) => {
-    console.error('Error:', err);
+  await consumer.subscribe({ topic: process.env.KAFKA_TOPIC });
+
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      console.log({
+        value: message.value.toString(),
+        key: message.key.toString(),
+        topic,
+        partition,
+        offset: message.offset,
+      });
+    },
   });
+};
 
-app.get('/messages', (req, res) => {
-  res.json({ status: 'Messages processed or processing logic here' });
+runConsumer().catch(console.error);
+
+app.get('/health', async (req, res) => {
+  res.status(200).send('Running...');
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-
-process.on('SIGINT', () => {
-  console.log('Closing consumer');
-  consumer.disconnect();
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

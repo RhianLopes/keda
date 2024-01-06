@@ -9,12 +9,14 @@ network:
   port: 3000
 
 env:
-  KAFKA_BROKER: '172.20.0.4:9092'
+  KAFKA_BROKERS: 'kafka-controller-0.kafka-controller-headless.kafka.svc.cluster.local:9092,kafka-controller-1.kafka-controller-headless.kafka.svc.cluster.local:9092,kafka-controller-2.kafka-controller-headless.kafka.svc.cluster.local:9092'
   KAFKA_CONSUMER_GROUP: 'example-consumer-group'
   KAFKA_TOPIC: 'example-topic'
+  KAFKA_USER: 'user1'
+  KAFKA_PASSWORD: '<client_password>'
 
 scaling: 
-  enabled: true
+  enabled: false
   minReplicas: 0
   maxReplicas: 4
   pollingInterval: 10
