@@ -15,7 +15,7 @@ const kafka = new Kafka({
   sasl: {
     mechanism: 'plain',
     username: process.env.KAFKA_USER,
-    password: process.env.KAFKA_PASSWORD,
+    password: process.env.KAFKA_SECRET,
   },
 });
 

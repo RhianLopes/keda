@@ -9,7 +9,7 @@
 ## Install Rancher with Docker
 
 ```shell
-docker run --name rancher -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:latest
+docker run --name rancher -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged rancher/rancher:v2.7.9
 ```
 
 - Rancher: http://localhost:80/
@@ -43,7 +43,7 @@ kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storagec
 ## Install kafka with Helm
 
 ```shell
-helm install kafka bitnami/kafka --namespace kafka --create-namespace
+helm install kafka bitnami/kafka --version 26.6.2 --namespace kafka --create-namespace
 ```
 
 ## Install kafka-ui with Helm
@@ -52,15 +52,15 @@ helm install kafka bitnami/kafka --namespace kafka --create-namespace
 kubectl get secret kafka-user-passwords --namespace kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1
 ```
 
-Get the client password from kafka and use in <client_password>:
+Get the client password from kafka and use in <client_secret>:
 
 ```shell
-helm install kafka-ui kafka-ui/kafka-ui \
+helm install kafka-ui kafka-ui/kafka-ui --version 0.7.5 \
     --set envs.config.KAFKA_CLUSTERS_0_NAME=local \
     --set envs.config.KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS="kafka-controller-0.kafka-controller-headless.kafka.svc.cluster.local:9092\,kafka-controller-1.kafka-controller-headless.kafka.svc.cluster.local:9092\,kafka-controller-2.kafka-controller-headless.kafka.svc.cluster.local:9092" \
     --set envs.config.KAFKA_CLUSTERS_0_PROPERTIES_SECURITY_PROTOCOL=SASL_PLAINTEXT \
     --set envs.config.KAFKA_CLUSTERS_0_PROPERTIES_SASL_MECHANISM=PLAIN \
-    --set envs.config.KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG='org.apache.kafka.common.security.plain.PlainLoginModule required username="user1" password="<client_password>";' \
+    --set envs.config.KAFKA_CLUSTERS_0_PROPERTIES_SASL_JAAS_CONFIG='org.apache.kafka.common.security.plain.PlainLoginModule required username="user1" password="<client_secret>";' \
     --namespace kafka-ui --create-namespace
 ```
 
@@ -95,22 +95,8 @@ docker push rhianlopes/kafka-consumer:latest
 cd ..
 ```
 
-Edit `helm-charts/worker/values.yaml` with <client_password> value in `KAFKA_PASSWORD`
+Edit `helm-charts/worker/values.yaml` with <client_secret> value in `KAFKA_PASSWORD`
 
 ```shell
 helm upgrade --install kafka-consumer helm-charts/worker -f helm-charts/worker/values.yaml --namespace dev-kafka-consumer --create-namespace
-```
-
-## Install keda with Helm
-
-```shell
-helm repo add kedacore https://kedacore.github.io/charts
-```
-
-```shell
-helm repo update
-```
-
-```shell
-helm install keda kedacore/keda --namespace keda --create-namespace
 ```
