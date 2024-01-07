@@ -96,7 +96,7 @@ docker push rhianlopes/kafka-consumer:latest
 cd ..
 ```
 
-Edit `helm-charts/worker/values.yaml` with <client_secret> value in `KAFKA_PASSWORD`
+Edit `helm-charts/worker/values.yaml` with <client_secret> value in `KAFKA_SECRET`
 
 ```shell
 helm upgrade --install kafka-consumer helm-charts/worker -f helm-charts/worker/values.yaml --namespace dev-kafka-consumer --create-namespace
