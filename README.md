@@ -5,6 +5,7 @@
 - [Docker](https://docs.docker.com/get-docker/)
 - [Helm](https://helm.sh/docs/intro/install/)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Node](https://nodejs.org/en/download/current)
 
 ## Install Rancher with Docker
 
