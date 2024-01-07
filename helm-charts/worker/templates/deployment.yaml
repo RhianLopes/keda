@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Values.environment }}-{{ .Release.Name }}
 spec:
-  replicas: {{ .Values.scaling.minReplicas }}
+  replicas: 1
   selector:
     matchLabels:
       app: {{ .Release.Name }}
