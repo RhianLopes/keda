@@ -1,4 +1,4 @@
-# KEDA
+# Playground Kafka
 
 ## Prerequisites
 
